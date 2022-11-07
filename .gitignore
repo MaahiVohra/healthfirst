@@ -7,7 +7,7 @@
 
 # testing
 /coverage
-
+#git ignore
 # database
 /prisma/db.sqlite
 /prisma/db.sqlite-journal
