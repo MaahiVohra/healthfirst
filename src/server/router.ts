@@ -1,6 +1,6 @@
 import { initTRPC, TRPCError } from "@trpc/server";
 import { hash } from "argon2";
-
+import { v4 as uuid } from "uuid";
 import type { IContext } from "./context";
 import { signUpSchema } from "../common/validation/auth";
 
@@ -22,9 +22,9 @@ export const serverRouter = t.router({
     }
 
     const hashedPassword = await hash(password);
-
+    const userId = uuid();
     const result = await ctx.prisma.user.create({
-      data: { username, email, password: hashedPassword },
+      data: { id: userId, username, email, password: hashedPassword },
     });
 
     return {
