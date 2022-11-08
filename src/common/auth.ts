@@ -22,15 +22,11 @@ export const nextAuthOptions: NextAuthOptions = {
             email: credentials.email,
           },
         });
-        if (!user) return null;
-
         const valid = await verify(user.password, credentials.password);
-        if (!valid) {
-          return null;
-        }
-
-        if (user) {
+        if (user && valid) {
           return { ...user, email: user.email };
+        } else {
+          return null;
         }
       },
     }),
