@@ -2,41 +2,46 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { useCallback } from "react";
-import { signIn } from "next-auth/react";
+import { useRouter } from "next/router";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { loginSchema, ILogin } from "../common/validation/auth";
+import { signUpSchema, ISignUp } from "../common/validation/auth";
+import { trpc } from "../common/trpc";
 
-const Home: NextPage = () => {
-  const { handleSubmit, control, reset } = useForm<ILogin>({
+const SignUp: NextPage = () => {
+  const router = useRouter();
+  const { handleSubmit, control, reset } = useForm<ISignUp>({
     defaultValues: {
+      username: "",
       email: "",
       password: "",
     },
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(signUpSchema),
   });
 
+  const { mutateAsync } = trpc.signup.useMutation();
+
   const onSubmit = useCallback(
-    async (data: ILogin) => {
+    async (data: ISignUp) => {
       try {
-        await signIn("credentials", { ...data, callbackUrl: "/dashboard" });
-        reset();
+        const result = await mutateAsync(data);
+        if (result.status === 201) {
+          reset();
+          router.push("/");
+        }
       } catch (err) {
         console.error(err);
       }
     },
-    [reset]
+    [mutateAsync, router, reset]
   );
 
   return (
     <div>
       <Head>
-        <title>HealthFirst - Login</title>
-        <meta
-          name="description"
-          content="HealthFirst - A platform for your medical documentation."
-        />
+        <title>Next App - Register</title>
+        <meta name="description" content="HealthFirst - Register Now!" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -47,7 +52,20 @@ const Home: NextPage = () => {
         >
           <div className="card bg-base-100 w-96 text-center shadow-xl">
             <div className="card-body">
-              <h1 className="m-4 text-3xl font-semibold">Login</h1>
+              <h1 className="m-4 text-3xl font-semibold">Create an account</h1>
+              <Controller
+                name="username"
+                control={control}
+                render={({ field }) => (
+                  <input
+                    type="text"
+                    placeholder="Username..."
+                    className="m-4 border-b-2 border-black p-2 outline-none"
+                    {...field}
+                  />
+                )}
+              />
+
               <Controller
                 name="email"
                 control={control}
@@ -67,29 +85,30 @@ const Home: NextPage = () => {
                 render={({ field }) => (
                   <input
                     type="password"
-                    placeholder="Password..."
+                    placeholder="Type your password..."
                     className="m-4 border-b-2 border-black p-2 outline-none"
                     {...field}
                   />
                 )}
               />
+
               <div className="card-actions items-center justify-between">
+                {/* <Link href="/" className="link">
+                  Go to login
+                </Link> */}
+
                 <button
                   className="m-4 w-1/2 rounded-3xl bg-violet-800 p-2 font-bold text-white"
                   type="submit"
                 >
-                  Login
+                  Sign Up
                 </button>
-                <br />
                 <p className="m-4 font-semibold text-gray-400">
-                  Not registered?
+                  Already have an account?
                   <span className="text-violet-800">
-                    <Link href="/sign-up"> Sign Up</Link>
+                    <Link href="/"> Login</Link>
                   </span>
                 </p>
-                {/* <Link href="/sign-up" className="link">
-                  Go to sign up
-                </Link> */}
               </div>
             </div>
           </div>
@@ -99,4 +118,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default SignUp;

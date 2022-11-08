@@ -1,20 +1,22 @@
-import { type AppType } from "next/app";
-import { type Session } from "next-auth";
+import "../styles/globals.css";
+import type { AppProps } from "next/app";
+import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 
-import { trpc } from "../utils/trpc";
+import { trpc } from "../common/trpc";
 
-import "../styles/globals.css";
+interface CustomAppProps extends AppProps {
+  pageProps: {
+    session?: Session;
+  } & AppProps["pageProps"];
+}
 
-const MyApp: AppType<{ session: Session | null }> = ({
-  Component,
-  pageProps: { session, ...pageProps },
-}) => {
+const CustomApp = ({ Component, pageProps }: CustomAppProps) => {
   return (
-    <SessionProvider session={session}>
+    <SessionProvider session={pageProps.session}>
       <Component {...pageProps} />
     </SessionProvider>
   );
 };
 
-export default trpc.withTRPC(MyApp);
+export default trpc.withTRPC(CustomApp);
