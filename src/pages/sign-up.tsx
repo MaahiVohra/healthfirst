@@ -6,7 +6,8 @@ import { useRouter } from "next/router";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { signUpSchema, ISignUp } from "../common/validation/auth";
+import { signUpSchema } from "../common/validation/auth";
+import type { ISignUp } from "../common/validation/auth";
 import { trpc } from "../common/trpc";
 
 const SignUp: NextPage = () => {

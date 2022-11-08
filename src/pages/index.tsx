@@ -6,7 +6,8 @@ import { signIn } from "next-auth/react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { loginSchema, ILogin } from "../common/validation/auth";
+import { loginSchema } from "../common/validation/auth";
+import type { ILogin } from "../common/validation/auth";
 
 const Home: NextPage = () => {
   const { handleSubmit, control, reset } = useForm<ILogin>({

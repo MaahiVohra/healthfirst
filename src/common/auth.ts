@@ -1,4 +1,4 @@
-import { NextAuthOptions } from "next-auth";
+import type { NextAuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { verify } from "argon2";
 
@@ -13,25 +13,25 @@ export const nextAuthOptions: NextAuthOptions = {
         email: {
           label: "Email",
           type: "email",
-          placeholder: "jsmith@gmail.com",
+          placeholder: "",
         },
         password: { label: "Password", type: "password" },
       },
-      authorize: async (credentials) => {
+      async authorize(credentials){
         try {
-          const { email, password } = await loginSchema.parseAsync(credentials);
+          const creds = await loginSchema.parseAsync(credentials);
 
           const result = await prisma.user.findFirst({
-            where: { email },
+            where: { email: creds.email },
           });
 
           if (!result) return null;
 
-          const isValidPassword = await verify(result.password, password);
+          const isValidPassword = await verify(result.password, creds.password);
 
           if (!isValidPassword) return null;
 
-          return { id: result.id, email, username: result.username };
+          return result;
         } catch {
           return null;
         }
