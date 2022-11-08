@@ -1,15 +1,18 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { signIn } from "next-auth/react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { loginSchema } from "../common/validation/auth";
 import type { ILogin } from "../common/validation/auth";
+import { useRouter } from "next/router";
 
 const Home: NextPage = () => {
+  const [error, setError] = useState("");
+  const router = useRouter();
   const { handleSubmit, control, reset } = useForm<ILogin>({
     defaultValues: {
       email: "",
@@ -20,14 +23,27 @@ const Home: NextPage = () => {
 
   const onSubmit = useCallback(
     async (data: ILogin) => {
-      try {
-        await signIn("credentials", { ...data, callbackUrl: "/dashboard" });
-        reset();
-      } catch (err) {
-        console.error(err);
+      if (data.password.length < 5 || data.password.length > 20) {
+        setError("Password should be between 5-20 characters");
+      } else {
+        try {
+          setError("");
+          const result = await signIn("credentials", {
+            ...data,
+            redirect: false,
+          });
+          reset();
+          if (result.ok) {
+            router.push("/dashboard");
+          } else {
+            setError("Incorrect Email or Password");
+          }
+        } catch (err) {
+          console.log(err);
+        }
       }
     },
-    [reset]
+    [reset, router]
   );
 
   return (
@@ -49,6 +65,12 @@ const Home: NextPage = () => {
           <div className="card bg-base-100 w-96 text-center shadow-xl">
             <div className="card-body">
               <h1 className="m-4 text-3xl font-semibold">Login</h1>
+              <p
+                className="bg-red-300 font-bold text-white"
+                aria-live="assertive"
+              >
+                {error}
+              </p>
               <Controller
                 name="email"
                 control={control}
