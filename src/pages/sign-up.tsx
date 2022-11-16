@@ -1,16 +1,18 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import { useCallback } from "react";
+import { useCallback, useContext } from "react";
 import { useRouter } from "next/router";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
+import Image from "next/image";
 import { signUpSchema } from "../common/validation/auth";
 import type { ISignUp } from "../common/validation/auth";
 import { trpc } from "../common/trpc";
+import { Context } from "./context";
 
 const SignUp: NextPage = () => {
+  const { isLoading, handleLoading, loadingImage } = useContext(Context);
   const router = useRouter();
   const { handleSubmit, control, reset } = useForm<ISignUp>({
     defaultValues: {
@@ -25,6 +27,7 @@ const SignUp: NextPage = () => {
 
   const onSubmit = useCallback(
     async (data: ISignUp) => {
+      handleLoading(true);
       try {
         const result = await mutateAsync(data);
         if (result.status === 201) {
@@ -34,8 +37,9 @@ const SignUp: NextPage = () => {
       } catch (err) {
         console.error(err);
       }
+      handleLoading(false);
     },
-    [mutateAsync, router, reset]
+    [mutateAsync, router, reset, handleLoading]
   );
 
   return (
@@ -101,8 +105,19 @@ const SignUp: NextPage = () => {
                 <button
                   className="m-4 w-1/2 rounded-3xl bg-violet-800 p-2 font-bold text-white"
                   type="submit"
+                  disabled={isLoading}
                 >
-                  Sign Up
+                  {isLoading ? (
+                    <Image
+                      src={loadingImage}
+                      alt="loading"
+                      width={25}
+                      height={25}
+                      className="m-auto"
+                    />
+                  ) : (
+                    "SignUp"
+                  )}
                 </button>
                 <p className="m-4 font-semibold text-gray-400">
                   Already have an account?

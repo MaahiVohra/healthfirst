@@ -1,17 +1,19 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import { useCallback, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import { signIn } from "next-auth/react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import { loginSchema } from "../common/validation/auth";
 import type { ILogin } from "../common/validation/auth";
 import { useRouter } from "next/router";
+import Image from "next/image";
+import { Context } from "./context";
 
 const Home: NextPage = () => {
   const [error, setError] = useState("");
+  const { isLoading, handleLoading, loadingImage } = useContext(Context);
   const router = useRouter();
   const { handleSubmit, control, reset } = useForm<ILogin>({
     defaultValues: {
@@ -26,6 +28,7 @@ const Home: NextPage = () => {
       if (data.password.length < 5 || data.password.length > 20) {
         setError("Password should be between 5-20 characters");
       } else {
+        handleLoading(true);
         try {
           setError("");
           const result = await signIn("credentials", {
@@ -41,9 +44,10 @@ const Home: NextPage = () => {
         } catch (err) {
           console.log(err);
         }
+        handleLoading(false);
       }
     },
-    [reset, router]
+    [reset, router, handleLoading]
   );
 
   return (
@@ -98,10 +102,21 @@ const Home: NextPage = () => {
               />
               <div className="card-actions items-center justify-between">
                 <button
-                  className="m-4 w-1/2 rounded-3xl bg-violet-800 p-2 font-bold text-white"
+                  className="relative m-4 h-10 w-1/2 rounded-3xl bg-violet-800  p-2 font-bold text-white"
                   type="submit"
+                  disabled={isLoading}
                 >
-                  Login
+                  {isLoading ? (
+                    <Image
+                      src={loadingImage}
+                      alt="loading"
+                      width={25}
+                      height={25}
+                      className="m-auto"
+                    />
+                  ) : (
+                    "Login"
+                  )}
                 </button>
                 <br />
                 <p className="m-4 font-semibold text-gray-400">
