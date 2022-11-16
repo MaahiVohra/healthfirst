@@ -11,7 +11,7 @@ import type { ISignUp } from "../common/validation/auth";
 import { trpc } from "../common/trpc";
 import loadingImage from "./loading.svg";
 const SignUp: NextPage = () => {
-  const [isLoading, setisLoading] = useState(true);
+  const [isLoading, setisLoading] = useState(false);
   const router = useRouter();
   const { handleSubmit, control, reset } = useForm<ISignUp>({
     defaultValues: {

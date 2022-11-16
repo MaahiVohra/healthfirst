@@ -12,7 +12,7 @@ import Image from "next/image";
 import loadingImage from "./loading.svg";
 const Home: NextPage = () => {
   const [error, setError] = useState("");
-  const [isLoading, setisLoading] = useState(true);
+  const [isLoading, setisLoading] = useState(false);
   const router = useRouter();
   const { handleSubmit, control, reset } = useForm<ILogin>({
     defaultValues: {
