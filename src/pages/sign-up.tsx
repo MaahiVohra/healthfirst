@@ -31,12 +31,12 @@ const SignUp: NextPage = () => {
         const result = await mutateAsync(data);
         if (result.status === 201) {
           router.push("/");
-          reset();
         }
       } catch (err) {
         console.error(err);
+        reset();
       }
-      setisLoading(false);
+      // setisLoading(false);
     },
     [mutateAsync, router, reset]
   );

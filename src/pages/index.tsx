@@ -36,14 +36,14 @@ const Home: NextPage = () => {
           });
           if (result.ok) {
             router.push("/dashboard");
-            reset();
           } else {
             setError("Incorrect Email or Password");
           }
         } catch (err) {
           console.log(err);
+          reset();
         }
-        setisLoading(false);
+        // setisLoading(false);
       }
     },
     [reset, router]
