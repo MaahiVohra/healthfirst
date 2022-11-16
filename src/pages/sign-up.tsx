@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import { useCallback, useContext } from "react";
+import { useCallback, useState } from "react";
 import { useRouter } from "next/router";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,10 +9,9 @@ import Image from "next/image";
 import { signUpSchema } from "../common/validation/auth";
 import type { ISignUp } from "../common/validation/auth";
 import { trpc } from "../common/trpc";
-import { Context } from "./context";
-
+import loadingImage from "./loading.svg";
 const SignUp: NextPage = () => {
-  const { isLoading, handleLoading, loadingImage } = useContext(Context);
+  const [isLoading, setisLoading] = useState(true);
   const router = useRouter();
   const { handleSubmit, control, reset } = useForm<ISignUp>({
     defaultValues: {
@@ -27,7 +26,7 @@ const SignUp: NextPage = () => {
 
   const onSubmit = useCallback(
     async (data: ISignUp) => {
-      handleLoading(true);
+      setisLoading(true);
       try {
         const result = await mutateAsync(data);
         if (result.status === 201) {
@@ -37,9 +36,9 @@ const SignUp: NextPage = () => {
       } catch (err) {
         console.error(err);
       }
-      handleLoading(false);
+      setisLoading(false);
     },
-    [mutateAsync, router, reset, handleLoading]
+    [mutateAsync, router, reset]
   );
 
   return (

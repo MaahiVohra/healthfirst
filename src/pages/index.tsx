@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useState } from "react";
 import { signIn } from "next-auth/react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,11 +9,10 @@ import { loginSchema } from "../common/validation/auth";
 import type { ILogin } from "../common/validation/auth";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import { Context } from "./context";
-
+import loadingImage from "./loading.svg";
 const Home: NextPage = () => {
   const [error, setError] = useState("");
-  const { isLoading, handleLoading, loadingImage } = useContext(Context);
+  const [isLoading, setisLoading] = useState(true);
   const router = useRouter();
   const { handleSubmit, control, reset } = useForm<ILogin>({
     defaultValues: {
@@ -28,7 +27,7 @@ const Home: NextPage = () => {
       if (data.password.length < 5 || data.password.length > 20) {
         setError("Password should be between 5-20 characters");
       } else {
-        handleLoading(true);
+        setisLoading(true);
         try {
           setError("");
           const result = await signIn("credentials", {
@@ -44,10 +43,10 @@ const Home: NextPage = () => {
         } catch (err) {
           console.log(err);
         }
-        handleLoading(false);
+        setisLoading(false);
       }
     },
-    [reset, router, handleLoading]
+    [reset, router]
   );
 
   return (
