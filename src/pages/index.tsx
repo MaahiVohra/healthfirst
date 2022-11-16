@@ -34,9 +34,9 @@ const Home: NextPage = () => {
             ...data,
             redirect: false,
           });
-          reset();
           if (result.ok) {
             router.push("/dashboard");
+            reset();
           } else {
             setError("Incorrect Email or Password");
           }
