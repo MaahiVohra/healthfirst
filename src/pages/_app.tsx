@@ -4,6 +4,7 @@ import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 
 import { trpc } from "../common/trpc";
+import { Provider } from "./context";
 
 interface CustomAppProps extends AppProps {
   pageProps: {
@@ -14,7 +15,9 @@ interface CustomAppProps extends AppProps {
 const CustomApp = ({ Component, pageProps }: CustomAppProps) => {
   return (
     <SessionProvider session={pageProps.session}>
-      <Component {...pageProps} />
+      <Provider>
+        <Component {...pageProps} />
+      </Provider>
     </SessionProvider>
   );
 };
