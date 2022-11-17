@@ -1,51 +1,44 @@
 import type { NextPage } from "next";
-import { useSession, signOut } from "next-auth/react";
-import Head from "next/head";
-
+import { useSession } from "next-auth/react";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import user from "../../../public/user.png";
 import { requireAuth } from "../../common/requireAuth";
-
-export const getServerSideProps = requireAuth(async (ctx) => {
+import Sidebar from "../../components/sidebar";
+export const getServerSideProps = requireAuth(async () => {
   return { props: {} };
 });
 
 const Dashboard: NextPage = () => {
   const { data } = useSession();
-
+  const [isLoading, setisLoading] = useState(true);
+  useEffect(() => {
+    if (data) {
+      setisLoading(false);
+    }
+  }, [data]);
+  console.log(data);
+  console.log(isLoading);
   return (
-    <div className="hero bg-base-200 min-h-screen">
-      <Head>
-        <title>Dashboard</title>
-        <meta
-          name="description"
-          content="HealthFirst - A platform for your medical documentation."
-        />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <div className="hero-content">
-        <div className="max-w-lg">
-          <h1 className="text-center text-5xl font-bold leading-snug text-gray-400">
-            You are logged in!
-          </h1>
-          <p className="my-4 text-center leading-loose">
-            You are allowed to visit this page because you have a session,
-            otherwise you would be redirected to the login page.
+    <main className="flex font-montserrat">
+      <Sidebar />
+
+      <div className="h-screen w-9/12 bg-white"></div>
+      <div className="profilebar my-5 max-h-screen min-h-max w-2/12 border-l-2 p-10 text-center">
+        <div>
+          <Image
+            src={user}
+            alt="profile-photo"
+            width={50}
+            height={50}
+            className="m-auto mb-2"
+          />
+          <p className="font-montserrat text-sm font-bold">
+            {!isLoading && data.user.username}
           </p>
-          <div className="my-4 rounded-lg bg-gray-700 p-4">
-            <pre>
-              <code>{JSON.stringify(data, null, 2)}</code>
-            </pre>
-          </div>
-          <div className="text-center">
-            <button
-              className="btn btn-secondary"
-              onClick={() => signOut({ callbackUrl: "/" })}
-            >
-              Logout
-            </button>
-          </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 
