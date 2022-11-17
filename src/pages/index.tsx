@@ -38,6 +38,7 @@ const Home: NextPage = () => {
             router.push("/dashboard");
           } else {
             setError("Incorrect Email or Password");
+            setisLoading(false);
           }
         } catch (err) {
           console.log(err);
