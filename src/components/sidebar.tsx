@@ -1,9 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
-import { FaHistory } from "react-icons/Fa";
-import { AiFillMedicineBox } from "react-icons/Ai";
+// import { FaHistory } from "react-icons/Fa";
+import { FaHistory } from "react-icons/fa";
+import { AiFillMedicineBox } from "react-icons/ai";
 import { IoSettingsSharp } from "react-icons/io5";
-import { MdDashboard, MdLogout } from "react-icons/Md";
+import { MdDashboard, MdLogout } from "react-icons/md";
 import logo from "../../public/logo.png";
 import { signOut } from "next-auth/react";
 export default function Sidebar() {

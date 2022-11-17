@@ -17,8 +17,6 @@ const Dashboard: NextPage = () => {
       setisLoading(false);
     }
   }, [data]);
-  console.log(data);
-  console.log(isLoading);
   return (
     <main className="flex font-montserrat">
       <Sidebar />
