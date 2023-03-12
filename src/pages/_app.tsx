@@ -6,7 +6,9 @@ import { ThemeProvider, useTheme } from "next-themes";
 import { trpc } from "../common/trpc";
 import ThemeSwitch from "../components/ThemeSwitch";
 import { GlobalContextProvider } from "../context/AppContext";
+import { NextComponentType, NextPageContext } from "next";
 interface CustomAppProps extends AppProps {
+  Component: NextComponentType<NextPageContext, any, {}>;
   pageProps: {
     session?: Session;
   } & AppProps["pageProps"];
