@@ -1,13 +1,10 @@
-import Link from "next/link";
 import Image from "next/image";
-// import { FaHistory } from "react-icons/Fa";
 import { FaHistory } from "react-icons/fa";
 import { AiFillMedicineBox } from "react-icons/ai";
 import { IoSettingsSharp } from "react-icons/io5";
-import { MdDashboard, MdLogout, MdDarkMode, MdLightMode } from "react-icons/md";
+import { MdDashboard, MdLogout } from "react-icons/md";
 import logo from "../../public/logo.png";
 import { signOut } from "next-auth/react";
-import { useTheme } from "next-themes";
 import { NavLink } from "./Navlink";
 
 const style = {
@@ -15,8 +12,6 @@ const style = {
 };
 
 export default function Sidebar() {
-  const { theme, setTheme } = useTheme();
-
   return (
     <div className="sidebar flex max-h-screen w-2/12 flex-col justify-between px-6 py-10 text-center ">
       <div>
@@ -60,16 +55,6 @@ export default function Sidebar() {
           </ul>
         </div>
       </div>
-      {/* <button
-          className="mr-2"
-          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-        >
-          {theme === "light" ? (
-            <MdDarkMode className="rounded-full bg-gray-200 p-2 text-4xl" />
-          ) : (
-            <MdLightMode className="rounded-full bg-[#262626] p-2 text-4xl" />
-          )}
-        </button> */}
       <button
         className="absolute bottom-0 mb-6 ml-16"
         onClick={() => signOut({ callbackUrl: "/" })}
