@@ -1,16 +1,15 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useState } from "react";
 import { useRouter } from "next/router";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
-import { ILogin, signUpSchema } from "../common/validation/auth";
+import { signUpSchema } from "../common/validation/auth";
 import type { ISignUp } from "../common/validation/auth";
 import { trpc } from "../common/trpc";
 import loadingImage from "./loading.svg";
-import { signIn } from "next-auth/react";
 import { useAppContext } from "../hooks/useAppContext";
 import { FaUserAlt, FaUserMd } from "react-icons/fa";
 const loginClasses = {
