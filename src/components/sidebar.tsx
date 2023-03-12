@@ -4,12 +4,21 @@ import Image from "next/image";
 import { FaHistory } from "react-icons/fa";
 import { AiFillMedicineBox } from "react-icons/ai";
 import { IoSettingsSharp } from "react-icons/io5";
-import { MdDashboard, MdLogout } from "react-icons/md";
+import { MdDashboard, MdLogout, MdDarkMode, MdLightMode } from "react-icons/md";
 import logo from "../../public/logo.png";
 import { signOut } from "next-auth/react";
+import { useTheme } from "next-themes";
+import { NavLink } from "./Navlink";
+
+const style = {
+  listitem: "p-4 transition-all flex items-center mt-2 rounded",
+};
+
 export default function Sidebar() {
+  const { theme, setTheme } = useTheme();
+
   return (
-    <div className="sidebar my-5 flex max-h-screen w-2/12 flex-col justify-between border-r-2 py-10 text-center">
+    <div className="sidebar flex max-h-screen w-2/12 flex-col justify-between px-6 py-10 text-center ">
       <div>
         <div className="logo">
           <Image
@@ -19,48 +28,54 @@ export default function Sidebar() {
             height={25}
             className="m-auto mb-2"
           />
-          <h1 className="font-montserrat text-2xl font-black text-violet-900">
-            HealthFirst
-          </h1>
+          <h1 className="font-montserrat text-2xl font-black ">HealthFirst</h1>
         </div>
         <br />
         <div className="tabs text-left font-bold">
           <ul>
-            <li className="p-4 hover:bg-violet-50">
-              <Link href="/dashboard" className="flex items-center">
+            <li>
+              <NavLink href="/dashboard" className={style.listitem}>
                 <MdDashboard />
                 &nbsp; Dashboard
-              </Link>
+              </NavLink>
             </li>
-            <li className=" p-4 hover:bg-violet-50">
-              <Link href="/dashboard" className="flex items-center">
+            <li>
+              <NavLink href="/current" className={style.listitem}>
                 <AiFillMedicineBox />
                 &nbsp; Ongoing
-              </Link>
+              </NavLink>
             </li>
-            <li className=" p-4 hover:bg-violet-50">
-              <Link href="/dashboard" className="flex items-center">
+            <li>
+              <NavLink href="/treatments" className={style.listitem}>
                 <FaHistory />
-                &nbsp; History
-              </Link>
+                &nbsp; Treatments
+              </NavLink>
             </li>
-            <li className=" p-4 hover:bg-violet-50">
-              <Link href="/dashboard" className="flex items-center">
+            <li>
+              <NavLink href="/settings" className={style.listitem}>
                 <IoSettingsSharp />
                 &nbsp; Settings
-              </Link>
+              </NavLink>
             </li>
           </ul>
         </div>
       </div>
-      <div className="logout">
-        <button className="" onClick={() => signOut({ callbackUrl: "/" })}>
-          <p className="flex items-center">
-            <MdLogout className="rounded-full bg-black p-2 pl-3 text-4xl text-white" />
-            &nbsp; Log out
-          </p>
-        </button>
-      </div>
+      {/* <button
+          className="mr-2"
+          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+        >
+          {theme === "light" ? (
+            <MdDarkMode className="rounded-full bg-gray-200 p-2 text-4xl" />
+          ) : (
+            <MdLightMode className="rounded-full bg-[#262626] p-2 text-4xl" />
+          )}
+        </button> */}
+      <button
+        className="absolute bottom-0 mb-6 ml-16"
+        onClick={() => signOut({ callbackUrl: "/" })}
+      >
+        <MdLogout className="rounded-full bg-black p-2 pl-3 text-4xl text-white " />
+      </button>
     </div>
   );
 }
