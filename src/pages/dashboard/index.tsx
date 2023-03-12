@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import user from "../../../public/user.png";
 import { requireAuth } from "../../common/requireAuth";
-import Sidebar from "components/Sidebar";
+import Sidebar from "components/Bar";
 import Timeline from "components/Timeline";
 export const getServerSideProps = requireAuth(async () => {
   return { props: {} };

@@ -3,7 +3,7 @@ import { FaHistory } from "react-icons/fa";
 import { AiFillMedicineBox } from "react-icons/ai";
 import { IoSettingsSharp } from "react-icons/io5";
 import { MdDashboard, MdLogout } from "react-icons/md";
-import logo from "../../public/logo.png";
+import logo from "public/logo.png";
 import { signOut } from "next-auth/react";
 import { NavLink } from "./Navlink";
 

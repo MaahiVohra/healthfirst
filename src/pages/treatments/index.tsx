@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import user from "../../../public/user.png";
 import { trpc } from "../../common/trpc";
-import Sidebar from "../../components/Sidebar";
+import Sidebar from "../../components/Bar";
 
 const cardClasses = {
   card: "my-2 mx-6 flex flex-col items-center justify-between rounded-lg px-6 py-2 shadow-lg md:max-w-xl md:flex-row cursor-pointer",
